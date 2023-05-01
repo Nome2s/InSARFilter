@@ -110,13 +110,13 @@ real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 
 `goldstein_filter.py`：对int文件进行滤波的程序，该代码从命令行接收参数，例如：
 
-```
+```shell
 python goldstein_filter.py original.int [0.5] [32] [8]
 ```
 
 `gen_tif.py`：将int文件转化为tif文件，需要在命令行中提供文件名、宽度和高度作为参数。例如：
 
-```
+```shell
 python gen_tif.py filtered_test.int 2551 2108
 ```
 
