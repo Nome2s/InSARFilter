@@ -14,17 +14,19 @@ def save_phase_tif(phase_data, output_file):
     transform = Affine.translation(0.5, 0.5) * Affine.scale(1, -1)
 
     with rasterio.open(
-            output_file,
-            'w',
-            driver='GTiff',
-            height=phase_data.shape[0],
-            width=phase_data.shape[1],
-            count=1,
-            dtype=phase_data.dtype,
-            crs='+proj=latlong',
-            transform=transform,
+        output_file,
+        'w',
+        driver='GTiff',
+        height=phase_data.shape[0],
+        width=phase_data.shape[1],
+        count=3,  # Changed from 1 to 3 for R, G, B channels
+        dtype=phase_data.dtype,
+        crs='+proj=latlong',
+        transform=transform,
     ) as dst:
-        dst.write(phase_data, 1)
+        for k in range(3):  # Add this loop to iterate over the color channels
+            dst.write(phase_data[:, :, k], k + 1)
+
 
 
 def main(file_name, width, height):
