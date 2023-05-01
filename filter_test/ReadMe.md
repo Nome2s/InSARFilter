@@ -1,7 +1,8 @@
-download at:
+# Goldstein滤波算法极其实现
 
-https://disk.pku.edu.cn:443/link/5CB824412F45BBA73FA67BE18DE2F993
--------------------------------------------------------------------
+## Requirements：
+
+download at:https://disk.pku.edu.cn:443/link/5CB824412F45BBA73FA67BE18DE2F993 
 
 
 Using Python or other programming languages to implement the interferogram filtering algorithm in the following paper
@@ -48,9 +49,7 @@ Results should include
 * experimental results with your codes, e.g. images before and after filtering (such as diff_150405-150503_10rlks_56alks.int.tif), parameters you used for filtering.
 * a simple report about your work
 
-
-
-
+## 要求
 
 下载地址：https://disk.pku.edu.cn:443/link/5CB824412F45BBA73FA67BE18DE2F993
 
@@ -96,4 +95,28 @@ real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 - 用你的代码进行的实验结果，例如过滤前后的图像（如diff_150405-150503_10rlks_56alks.int.tif），你用于过滤的参数。
 
 - 一份关于你的工作的简单报告，在报告中谈谈你对这个方法的见解，例如，为什么它能起到滤波的作用，可能的改进方法等
+
+## 文件说明
+
+`original.int`：用于测试的干涉图原图
+
+`original.int.tif`：原干涉图相位的假彩色图像
+
+`original.int.xml`：指定原干涉图大小、精度等的xml文件
+
+`filtered_test.int`：经过滤波后的干涉图
+
+`filtered_test.int.tif`.：经过滤波后的干涉图的假彩色图像
+
+`goldstein_filter.py`：对int文件进行滤波的程序，该代码从命令行接收参数，例如：
+
+```
+python goldstein_filter.py original.int [0.5] [32] [8]
+```
+
+`gen_tif.py`：将int文件转化为tif文件，需要在命令行中提供文件名、宽度和高度作为参数。例如：
+
+```
+python gen_tif.py filtered_test.int 2551 2108
+```
 
