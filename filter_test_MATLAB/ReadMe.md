@@ -1,4 +1,4 @@
-# Goldstein滤波算法极其实现
+# Goldstein滤波算法及其MATLAB实现
 
 ## Requirements：
 
