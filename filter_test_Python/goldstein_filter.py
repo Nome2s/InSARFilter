@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 from lxml import etree
+import os
 
 def read_interferogram(file_name, width, height):
     # 从二进制文件中读取干涉图数据并将其重新整形为二维矩阵
@@ -34,7 +35,7 @@ def goldstein_filter(interferogram, filter_strength, window_size, step_size):
 
     return filtered_interferogram
 
-def main(file_name, filter_strength=0.5, window_size=32, step_size=8):
+def main(file_name, output_folder, filter_strength=0.5, window_size=32, step_size=8):
     # 解析 XML 文件以获取干涉图的宽度和高度
     xml_file = file_name + '.xml'
     tree = etree.parse(xml_file)
@@ -46,21 +47,21 @@ def main(file_name, filter_strength=0.5, window_size=32, step_size=8):
     filtered_interferogram = goldstein_filter(interferogram, filter_strength, window_size, step_size)
 
     # 将过滤后的干涉图写入输出文件
-    output_file = 'filtered_' + file_name
+    output_file = os.path.join(output_folder, 'filtered_' + os.path.basename(file_name))
     write_interferogram(output_file, filtered_interferogram)
-
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         file_name = sys.argv[1]
+        output_folder = sys.argv[2]
     else:
-        print("Usage: python goldstein_filter.py <file_name> [<filter_strength> <window_size> <step_size>]")
+        print("Usage: python goldstein_filter.py <file_name> <output_folder> [<filter_strength> <window_size> <step_size>]")
         sys.exit(1)
 
-    if len(sys.argv) > 2:
-        filter_strength = float(sys.argv[2])
-        window_size = int(sys.argv[3])
-        step_size = int(sys.argv[4])
-        main(file_name, filter_strength, window_size, step_size)
+    if len(sys.argv) > 3:
+        filter_strength = float(sys.argv[3])
+        window_size = int(sys.argv[4])
+        step_size = int(sys.argv[5])
+        main(file_name, output_folder, filter_strength, window_size, step_size)
     else:
-        main(file_name)
+        main(file_name, output_folder)
