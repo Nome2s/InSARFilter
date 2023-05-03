@@ -55,7 +55,7 @@ function main()
             % 构造输出文件路径
             [~, name, ~] = fileparts(file);
             intOutputPath = fullfile(outputPath, 'filtered.int');
-            imageOutputPath = fullfile(outputPath, 'filtered.jpeg');
+            imageOutputPath = fullfile(outputPath, 'filtered.tif');
 
             % 保存滤波后的int文件
             write_int(intOutputPath, filteredData);
