@@ -4,7 +4,6 @@ function data=read_int(file_name,width)
 % 输入参数：
 %   file_name   干涉图数据文件名
 %   width       干涉图宽度，即列数
-%
 % 输出：
 %   data        干涉图复数矩阵
 % -------------------------------------

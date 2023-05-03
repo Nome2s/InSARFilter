@@ -51,9 +51,24 @@ function main()
 
             % 读取干涉图复数数据
             data = read_int(file, width);
+            
+            % 显示滤波前的干涉图
+            phase = angle(data);
+            figure,imagesc(phase,[-pi,pi]);colormap('jet');colorbar;
+            title('Original Image');
 
             % 进行Goldstein滤波
             filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
+
+            % 显示滤波后的干涉图
+            phase_out=angle(filteredData);
+            figure,imagesc(phase_out,[-pi,pi]);colormap('jet');colorbar;
+            title('Filtered Image');
+
+            % 计算滤波前后的差值并显示
+            diff=phase_out-phase;
+            figure,imagesc(diff);colormap('jet');colorbar;
+            title(['Phase Difference']);
 
             % 构造输出文件路径
             [~, ~] = fileparts(file);
