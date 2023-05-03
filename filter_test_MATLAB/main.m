@@ -1,10 +1,12 @@
 function main()
+
+    clear all;clc
     % 图像宽度
     width = 2551;
     length = 2108;
     
     % 创建主界面
-    fig = uifigure('Name', 'Goldstein滤波', 'Position', [100 100 400 250]);
+    fig = uifigure('Name', 'Goldstein Filter', 'Position', [100 100 400 250]);
 
     % 创建文件路径标签
     filePathLabel = uilabel(fig, 'Position', [100 200 250 22], 'Text', '待处理文件路径:');
@@ -14,7 +16,7 @@ function main()
 
     % 创建滤波参数输入框和标签
     alphaEditField = uieditfield(fig, 'numeric', 'Position', [50 140 80 22], 'Value', 0.5);
-    alphaLabel = uilabel(fig, 'Position', [50 165 80 22], 'Text', '滤波参数 (alpha):');
+    alphaLabel = uilabel(fig, 'Position', [50 165 80 22], 'Text', '滤波参数:');
 
     % 创建滑动窗口大小输入框和标签
     windowSizeEditField = uieditfield(fig, 'numeric', 'Position', [180 140 80 22], 'Value', 32);
