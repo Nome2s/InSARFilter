@@ -47,7 +47,7 @@ class App(tk.Tk):
 
         self.before_image_label = tk.Label(before_image_container, image=None)
         self.before_image_label.pack()
-        tk.Label(before_image_container, text="Original Image").pack()
+        tk.Label(before_image_container, text="").pack()
 
         after_image_container = tk.Frame(image_frame)
         after_image_container.pack(side=tk.RIGHT, padx=10)
@@ -101,6 +101,7 @@ class App(tk.Tk):
         after_photo = ImageTk.PhotoImage(after_image)
         self.after_image_label.config(image=after_photo)
         self.after_image_label.image = after_photo
+
 
 if __name__ == "__main__":
     app = App()
