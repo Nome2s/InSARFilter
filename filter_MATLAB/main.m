@@ -1,9 +1,10 @@
 function main()
 
     clear all;clc
-    % 图像宽度
+
+    % 图像长宽
     width = 2551;
-    length = 2108;
+    %length = 2108;
     
     % 创建主界面
     fig = uifigure('Name', 'Goldstein Filter', 'Position', [100 100 400 250]);
@@ -55,9 +56,9 @@ function main()
             filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
 
             % 构造输出文件路径
-            [~, name, ~] = fileparts(file);
+            [~, ~] = fileparts(file);
             intOutputPath = fullfile(outputPath, 'filtered.int');
-            imageOutputPath = fullfile(outputPath, 'filtered.tif');
+            imageOutputPath = fullfile(outputPath, 'filtered.int.tif');
 
             % 保存滤波后的int文件
             write_int(intOutputPath, filteredData);
