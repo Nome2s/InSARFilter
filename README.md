@@ -27,9 +27,13 @@ The interferogram for doing test is also provided. It is a simple 2-d matrix. Th
 
 
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
+
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
+
 ...
+
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
+
 
 
 You can import the interferogram into any image applications, such as Python, Matlab and ENVI. You can view its phase and magnitude. Magnitude usually has a large dynamic range, so you can take its logarithm when displaying it.
@@ -73,8 +77,11 @@ Goldstein and Werner, 1998, Radar interferogram filtering for geophysical applic
 还提供了做测试的干涉图。它是一个简单的2维矩阵。图像中只有一个波段。每个像素是一个复数，有一个实部和一个虚部，都是四字节的浮点数格式。干涉图被存储为
 
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
+
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
+
 ...
+
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 
 你可以将干涉图导入任何图像应用程序，如Python、Matlab和ENVI。你可以查看它的相位和幅值。幅值通常有很大的动态范围，所以你可以在显示它时取其对数。
