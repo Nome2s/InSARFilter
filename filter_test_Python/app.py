@@ -4,13 +4,14 @@ from tkinter import filedialog
 from goldstein_filter import main as goldstein_filter_main, read_interferogram
 from gen_tif import main as gen_tif_main
 from lxml import etree
+from PIL import Image, ImageTk
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
         self.title("Goldstein Filter & TIF Generator")
-        self.geometry("600x300")
+        self.geometry("1200x600")
 
         self.file_name = tk.StringVar()
         self.filter_strength = tk.DoubleVar(value=0.5)
@@ -35,12 +36,28 @@ class App(tk.Tk):
         self.output_info = tk.StringVar()
         tk.Label(self, textvariable=self.output_info).grid(row=5, columnspan=3)
 
+        self.before_image_label = tk.Label(self)
+        self.before_image_label.grid(row=6, column=0, columnspan=3)
+
+        self.after_image_label = tk.Label(self)
+        self.after_image_label.grid(row=6, column=3, columnspan=3)
+
         self.columnconfigure(1, weight=1)
+
+
 
     def browse_file(self):
         file_path = filedialog.askopenfilename()
         if file_path:
             self.file_name.set(file_path)
+
+    def display_image(self, file_path, label):
+        img = Image.open(file_path)
+        img.thumbnail((500, 500))  # Resize the image to fit the GUI
+        photo = ImageTk.PhotoImage(img)
+
+        label.config(image=photo)
+        label.image = photo
 
     def apply_filter_and_generate_tif(self):
         if not self.file_name.get():
@@ -65,7 +82,12 @@ class App(tk.Tk):
         output_message = f"Filtered and generated TIF for {self.file_name.get()} with filter strength {self.filter_strength.get()}, window size {self.window_size.get()}, and step size {self.step_size.get()}"
         self.output_info.set(output_message)
 
+        # Display the images
+        input_tif_file = self.file_name.get().replace('.int', '.int.tif')
+        self.display_image(input_tif_file, self.before_image_label)
+        self.display_image(output_file + ".tif", self.after_image_label)
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
