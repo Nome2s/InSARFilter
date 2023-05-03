@@ -1,6 +1,6 @@
 function main()
 
-    clear all;clc
+    %clear all;clc
 
     % 图像长宽
     width = 2551;
@@ -55,7 +55,13 @@ function main()
             % 显示滤波前的干涉图
             phase = angle(data);
             figure,imagesc(phase,[-pi,pi]);colormap('jet');colorbar;
-            title('Original Image');
+            title('Original Phase');
+
+            % 计算并显示原图的幅值干涉图
+            amplitude = abs(data);
+            figure, imagesc(log10(amplitude)); colormap('gray'); colorbar;
+            title('Original Amplitude (log10 scale)');
+            
 
             % 进行Goldstein滤波
             filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
@@ -64,6 +70,11 @@ function main()
             phase_out=angle(filteredData);
             figure,imagesc(phase_out,[-pi,pi]);colormap('jet');colorbar;
             title('Filtered Image');
+
+            % 计算并显示滤波后的幅值干涉图
+            amplitude_out = abs(filteredData);
+            figure, imagesc(log10(amplitude_out)); colormap('gray'); colorbar;
+            title('Filtered Amplitude (log10 scale)');
 
             % 计算滤波前后的差值并显示
             diff=phase_out-phase;
