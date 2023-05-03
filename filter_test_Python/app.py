@@ -1,7 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import filedialog
-from goldstein_filter import main as goldstein_filter_main
+from goldstein_filter import main as goldstein_filter_main, read_interferogram
 from gen_tif import main as gen_tif_main
 from lxml import etree
 
@@ -32,6 +32,9 @@ class App(tk.Tk):
 
         tk.Button(self, text="Apply Filter & Generate TIF", command=self.apply_filter_and_generate_tif).grid(row=4, columnspan=3)
 
+        self.output_info = tk.StringVar()
+        tk.Label(self, textvariable=self.output_info).grid(row=5, columnspan=3)
+
         self.columnconfigure(1, weight=1)
 
     def browse_file(self):
@@ -59,8 +62,8 @@ class App(tk.Tk):
 
         gen_tif_main(output_file, width, height)
 
-        print(
-            f"Filtered and generated TIF for {self.file_name.get()} with filter strength {self.filter_strength.get()}, window size {self.window_size.get()}, and step size {self.step_size.get()}")
+        output_message = f"Filtered and generated TIF for {self.file_name.get()} with filter strength {self.filter_strength.get()}, window size {self.window_size.get()}, and step size {self.step_size.get()}"
+        self.output_info.set(output_message)
 
 
 if __name__ == "__main__":

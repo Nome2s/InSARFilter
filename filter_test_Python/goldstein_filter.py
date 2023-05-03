@@ -26,7 +26,7 @@ def goldstein_filter(interferogram, filter_strength, window_size, step_size):
             spectrum = np.fft.fft2(window)
             # 计算滤波器掩模
             snr = np.abs(spectrum) / np.sqrt(filter_strength)
-            mask = np.where(snr > 1, 1, snr)
+            mask = 1 / (1 + (1 / snr)**(2 * filter_strength))
             # 应用滤波器掩模
             filtered_spectrum = spectrum * mask
             # 计算逆傅立叶变换并将其添加到过滤后的干涉图中
@@ -34,6 +34,7 @@ def goldstein_filter(interferogram, filter_strength, window_size, step_size):
             filtered_interferogram[y:y+window_size, x:x+window_size] = filtered_window
 
     return filtered_interferogram
+
 
 def main(file_name, output_folder, filter_strength=0.5, window_size=32, step_size=8):
     # 解析 XML 文件以获取干涉图的宽度和高度
