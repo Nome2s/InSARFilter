@@ -44,7 +44,7 @@ for ii=1:step_size:rows
 end
 % 掩膜原来是空值的像元
 idx=isnan(angle(cpx));
-out_cpx(idx)=0;
+out_cpx(idx)=nan;
 idx=angle(cpx)==0;
 out_cpx(idx)=0;
 out_cpx=abs(cpx).*complex(cos(out_cpx),sin(out_cpx));
