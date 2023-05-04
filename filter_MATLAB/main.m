@@ -52,20 +52,26 @@ function main()
             % 读取干涉图复数数据
             data = read_int(file, width);
             
-            % 显示滤波前的干涉图
+            % 显示滤波前的相位图
             phase = angle(data);
             figure,imagesc(phase,[-pi,pi]);colormap('jet');colorbar;
             title('Original Phase');
 
-            % 计算并显示原图的幅值干涉图
+            % 计算并显示原图的幅值图
             amplitude = abs(data);
             figure, imagesc(log10(amplitude)); colormap('gray'); colorbar;
             title('Original Amplitude (log10 scale)');
+
             
-            %显示原图像的（伪）相干性
+            %显示原图像的（伪）相干图
             coh = est_cc(data, 5);
             figure,imagesc(coh);colormap('jet');colorbar;
             title('Coherence of Original Image');
+            
+            %显示原图的相位标准差
+            ps_std = phase_std(data, 5);
+            figure,imagesc(ps_std);colormap('jet');colorbar;
+            title('Original Phase Standard Deviation')
 
             % 进行Goldstein滤波
             filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
@@ -85,11 +91,16 @@ function main()
             figure,imagesc(coh);colormap('jet');colorbar;
             title('Coherence of Filtered Image');
 
+
+            %显示滤波后图像的相位标准差
+            ps_std_filtered = phase_std(data, 5);
+            figure,imagesc(ps_std_filtered);colormap('jet');colorbar;
+            title('Filtered Phase Standard Deviation')
+
             % 计算滤波前后的差值并显示
             diff=phase_out-phase;
             figure,imagesc(diff);colormap('jet');colorbar;
             title('Phase Difference');
-
 
             % 构造输出文件路径
             [~, ~] = fileparts(file);

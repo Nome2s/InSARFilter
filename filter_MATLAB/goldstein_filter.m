@@ -39,12 +39,11 @@ for ii=1:step_size:rows
         H = H .* S;
         H=ifftshift(H);
         window=ifft2(H);
-        out_cpx(ii:mm,jj:nn)=angle(window);
+        out_cpx(ii:mm,jj:nn)=window;
     end
 end
 % 掩膜原来是空值的像元
+idx=angle(cpx)==0;
+out_cpx(idx)=nan;
 idx=isnan(angle(cpx));
 out_cpx(idx)=nan;
-idx=angle(cpx)==0;
-out_cpx(idx)=0;
-out_cpx=abs(cpx).*complex(cos(out_cpx),sin(out_cpx));
