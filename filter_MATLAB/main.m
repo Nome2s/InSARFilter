@@ -58,8 +58,8 @@ function main()
             title('Original Phase');
 
             % 计算并显示原图的幅值图
-            amplitude = abs(data);
-            figure, imagesc(log10(amplitude)); colormap('gray'); colorbar;
+            amplitude = log10(abs(data));
+            figure, imagesc(amplitude); colormap('gray'); colorbar;
             title('Original Amplitude (log10 scale)');
 
             
@@ -76,19 +76,19 @@ function main()
             % 进行Goldstein滤波
             filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
 
-            % 显示滤波后的干涉图
+            % 显示滤波后的相位图
             phase_out=angle(filteredData);
             figure,imagesc(phase_out,[-pi,pi]);colormap('jet');colorbar;
             title('Filtered Phase');
 
             % 计算并显示滤波后的幅值干涉图
-            amplitude_out = abs(filteredData);
-            figure, imagesc(log10(amplitude_out)); colormap('gray'); colorbar;
+            amplitude_out = log10(abs(filteredData));
+            figure, imagesc(amplitude_out); colormap('gray'); colorbar;
             title('Filtered Amplitude (log10 scale)');
             
             %显示滤波后图像的（伪）相干性
-            coh = est_cc(filteredData, 5);
-            figure,imagesc(coh);colormap('jet');colorbar;
+            coh_filetered = est_cc(filteredData, 5);
+            figure,imagesc(coh_filetered);colormap('jet');colorbar;
             title('Coherence of Filtered Image');
 
 
@@ -110,8 +110,8 @@ function main()
             % 保存滤波后的int文件
             write_int(intOutputPath, filteredData);
 
-            % 将滤波后的干涉图保存为图像
-            phase2raster(filteredData, imageOutputPath);
+            % 保存为图像
+            %phase2raster(filteredData, imageOutputPath);
 
             % 显示处理完成的消息对话框
             uialert(fig, '处理完成！', '提示', 'Icon', 'success');
