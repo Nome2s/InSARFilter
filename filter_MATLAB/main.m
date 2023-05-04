@@ -1,6 +1,6 @@
 function main()
 
-    %clear all;clc
+    clear all;clc
 
     % 图像长宽
     width = 2551;
@@ -62,6 +62,10 @@ function main()
             figure, imagesc(log10(amplitude)); colormap('gray'); colorbar;
             title('Original Amplitude (log10 scale)');
             
+            %显示原图像的（伪）相干性
+            coh = est_cc(data, 5);
+            figure,imagesc(coh);colormap('jet');colorbar;
+            title('Coherence of Original Image');
 
             % 进行Goldstein滤波
             filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
@@ -75,11 +79,18 @@ function main()
             amplitude_out = abs(filteredData);
             figure, imagesc(log10(amplitude_out)); colormap('gray'); colorbar;
             title('Filtered Amplitude (log10 scale)');
+            
+            %显示滤波后图像的（伪）相干性
+            coh = est_cc(filteredData, 5);
+            figure,imagesc(coh);colormap('jet');colorbar;
+            title('Coherence of Filtered Image');
 
             % 计算滤波前后的差值并显示
             diff=phase_out-phase;
             figure,imagesc(diff);colormap('jet');colorbar;
-            title(['Phase Difference']);
+            title('Phase Difference');
+
+
 
             % 构造输出文件路径
             [~, ~] = fileparts(file);
