@@ -69,7 +69,7 @@ function main()
             % 显示滤波后的干涉图
             phase_out=angle(filteredData);
             figure,imagesc(phase_out,[-pi,pi]);colormap('jet');colorbar;
-            title('Filtered Image');
+            title('Filtered Phase');
 
             % 计算并显示滤波后的幅值干涉图
             amplitude_out = abs(filteredData);
