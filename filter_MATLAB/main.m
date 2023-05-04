@@ -54,64 +54,85 @@ function main()
             
             % 显示滤波前的相位图
             phase = angle(data);
-            figure,imagesc(phase,[-pi,pi]);colormap('jet');colorbar;
+            figure, imagesc(phase,[-pi,pi]); colormap('jet'); colorbar;
             title('Original Phase');
-
+            saveas(gcf, fullfile(outputPath, 'OriginalPhase.tif'));
+        
             % 计算并显示原图的幅值图
-            amplitude = log10(abs(data));
-            figure, imagesc(amplitude); colormap('gray'); colorbar;
+            amplitude = abs(data);
+            figure, imagesc(log10(amplitude)); colormap('gray'); colorbar;
             title('Original Amplitude (log10 scale)');
-
-            
+            saveas(gcf, fullfile(outputPath, 'OriginalAmplitude.tif'));
+        
+        
+            % 显示原图的幅度图直方图
+            figure, histogram(log10(amplitude), 'BinEdges', -2.5:0.005:2.5, 'Normalization', 'probability');
+            title('Histogram of Original Amplitude (log10 scale)');
+            xlabel('Amplitude');
+            ylabel('Probability');
+            xlim([-2.5 2.5]);
+            saveas(gcf, fullfile(outputPath, 'OriginalHistogram.tif'));
+        
             %显示原图像的（伪）相干图
             coh = est_cc(data, 5);
-            figure,imagesc(coh);colormap('jet');colorbar;
+            figure, imagesc(coh); colormap('jet'); colorbar;
             title('Coherence of Original Image');
-            
+            saveas(gcf, fullfile(outputPath, 'OriginalcCoh.tif'));
+        
             %显示原图的相位标准差
             ps_std = phase_std(data, 5);
-            figure,imagesc(ps_std);colormap('jet');colorbar;
-            title('Original Phase Standard Deviation')
-
+            figure, imagesc(ps_std); colormap('jet'); colorbar;
+            title('Original Phase Standard Deviation');
+            saveas(gcf, fullfile(outputPath, 'OriginalStd.tif'));
+        
             % 进行Goldstein滤波
             filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
-
+        
             % 显示滤波后的相位图
             phase_out=angle(filteredData);
-            figure,imagesc(phase_out,[-pi,pi]);colormap('jet');colorbar;
+            figure, imagesc(phase_out,[-pi,pi]); colormap('jet'); colorbar;
             title('Filtered Phase');
-
-            % 计算并显示滤波后的幅值干涉图
-            amplitude_out = log10(abs(filteredData));
-            figure, imagesc(amplitude_out); colormap('gray'); colorbar;
+            saveas(gcf, fullfile(outputPath, 'FilteredPhase.tif'));
+        
+            % 计算并显示滤波后的幅值图
+            amplitude_out = abs(filteredData);
+            figure, imagesc(log10(amplitude_out)); colormap('gray'); colorbar;
             title('Filtered Amplitude (log10 scale)');
-            
+            saveas(gcf, fullfile(outputPath, 'FilteredAmplitude.tif'));
+
+            % 显示滤波后的幅度直方图
+            figure, histogram(log10(amplitude_out), 'BinEdges', -2.5:0.005:2.5, 'Normalization', 'probability');
+            title('Histogram of Filtered Amplitude (log10 scale)');
+            xlabel('Amplitude');
+            ylabel('Probability');
+            xlim([-2.5 2.5]);
+            saveas(gcf, fullfile(outputPath, 'FilteredHistogram.tif'));
+        
             %显示滤波后图像的（伪）相干性
             coh_filetered = est_cc(filteredData, 5);
-            figure,imagesc(coh_filetered);colormap('jet');colorbar;
+            figure, imagesc(coh_filetered); colormap('jet'); colorbar;
             title('Coherence of Filtered Image');
-
-
+            saveas(gcf, fullfile(outputPath, 'FilteredCoh.tif'));
+        
             %显示滤波后图像的相位标准差
             ps_std_filtered = phase_std(data, 5);
-            figure,imagesc(ps_std_filtered);colormap('jet');colorbar;
-            title('Filtered Phase Standard Deviation')
-
+            figure, imagesc(ps_std_filtered); colormap('jet'); colorbar;
+            title('Filtered Phase Standard Deviation');
+            saveas(gcf, fullfile(outputPath, 'FilteredStd.tif'));
+        
             % 计算滤波前后的差值并显示
             diff=phase_out-phase;
-            figure,imagesc(diff);colormap('jet');colorbar;
+            figure, imagesc(diff); colormap('jet'); colorbar;
             title('Phase Difference');
+            saveas(gcf, fullfile(outputPath, 'PhaseDiff.tif'));
+
 
             % 构造输出文件路径
             [~, ~] = fileparts(file);
             intOutputPath = fullfile(outputPath, 'filtered.int');
-            imageOutputPath = fullfile(outputPath, 'filtered.int.tif');
 
             % 保存滤波后的int文件
             write_int(intOutputPath, filteredData);
-
-            % 保存为图像
-            %phase2raster(filteredData, imageOutputPath);
 
             % 显示处理完成的消息对话框
             uialert(fig, '处理完成！', '提示', 'Icon', 'success');
@@ -119,6 +140,8 @@ function main()
             uialert(fig, '请选择一个待处理的文件', '提示', 'Icon', 'warning');
         end
     end
+
+
 
     % 浏览按钮的回调函数
     function browseButtonPushed(~, ~)
