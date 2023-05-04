@@ -91,7 +91,6 @@ function main()
             title('Phase Difference');
 
 
-
             % 构造输出文件路径
             [~, ~] = fileparts(file);
             intOutputPath = fullfile(outputPath, 'filtered.int');
@@ -100,7 +99,6 @@ function main()
             % 保存滤波后的int文件
             write_int(intOutputPath, filteredData);
 
-            %
             % 将滤波后的干涉图保存为图像
             phase2raster(filteredData, imageOutputPath);
 
