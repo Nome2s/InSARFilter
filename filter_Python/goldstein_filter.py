@@ -25,8 +25,8 @@ def goldstein_filter(interferogram, filter_strength, window_size, step_size):
             # 计算窗口的二维傅立叶变换
             spectrum = np.fft.fft2(window)
             # 计算滤波器掩模
-            snr = np.abs(spectrum) / np.sqrt(filter_strength)
-            mask = 1 / (1 + (1 / snr)**(2 * filter_strength))
+            snr = np.abs(spectrum)
+            mask = np.exp(-filter_strength * (1 - snr) / (1 + snr))
             # 应用滤波器掩模
             filtered_spectrum = spectrum * mask
             # 计算逆傅立叶变换并将其添加到过滤后的干涉图中
@@ -34,6 +34,7 @@ def goldstein_filter(interferogram, filter_strength, window_size, step_size):
             filtered_interferogram[y:y+window_size, x:x+window_size] = filtered_window
 
     return filtered_interferogram
+
 
 
 def main(file_name, output_folder, filter_strength=0.5, window_size=32, step_size=8):

@@ -67,7 +67,7 @@ class App(tk.Tk):
             print("Please select an input file.")
             return
 
-        output_folder = f"filtered_f{self.filter_strength.get()}_w{self.window_size.get()}_s{self.step_size.get()}"
+        output_folder = f"./data/filtered_f{self.filter_strength.get()}_w{self.window_size.get()}_s{self.step_size.get()}"
         os.makedirs(output_folder, exist_ok=True)
 
         output_file = os.path.join(output_folder, "filtered_" + os.path.basename(self.file_name.get()))
@@ -80,6 +80,7 @@ class App(tk.Tk):
         width = int(tree.findtext('.//property[@name="width"]/value'))
         height = int(tree.findtext('.//property[@name="length"]/value'))
 
+        # 在此处添加 gen_tif_main 的调用
         gen_tif_main(output_file, width, height)
 
         output_message = f"Filtered and generated TIF for {self.file_name.get()} with filter strength {self.filter_strength.get()}, window size {self.window_size.get()}, and step size {self.step_size.get()}"
@@ -96,7 +97,7 @@ class App(tk.Tk):
         self.before_image_label.image = before_photo
 
         # 显示滤波后的图像
-        after_image = Image.open(output_file.replace(".int", ".int.tif"))
+        after_image = Image.open(output_file.replace(".int", "_phase.tif"))
         after_image.thumbnail((200, 200), Image.LANCZOS)
         after_photo = ImageTk.PhotoImage(after_image)
         self.after_image_label.config(image=after_photo)

@@ -37,21 +37,34 @@ def save_phase_tif(phase_data, output_file):
             dst.write(phase_data[:, :, k], k + 1)
 
 
+
 def main(file_name, width, height):
     # 读取干涉图数据
     interferogram = read_interferogram(file_name, width, height)
     # 计算相位数据
     phase_data = np.angle(interferogram)
+    # 计算幅值数据
+    amplitude_data = np.log(np.abs(interferogram) + 1)
 
     # 使用HSV颜色映射将相位数据转换为彩色数据
-    cmap = plt.get_cmap('hsv')
-    phase_color = cmap((phase_data + np.pi) / (2 * np.pi))
+    cmap_phase = plt.get_cmap('hsv')
+    phase_color = cmap_phase((phase_data + np.pi) / (2 * np.pi))
     phase_color_uint8 = (phase_color * 255).astype(np.uint8)
 
+    # 使用灰度颜色映射将幅值数据转换为彩色数据
+    cmap_amplitude = plt.get_cmap('gray')
+    amplitude_color = cmap_amplitude(amplitude_data / amplitude_data.max())
+    amplitude_color_uint8 = (amplitude_color * 255).astype(np.uint8)
+
     # 生成输出文件名
-    output_file = file_name.replace('.int', '.int.tif')
-    # 将彩色相位数据保存为GeoTIFF文件
-    save_phase_tif(phase_color_uint8, output_file)
+    output_file_phase = file_name.replace('.int', '_phase.tif')
+    output_file_amplitude = file_name.replace('.int', '_amplitude.tif')
+
+    # 将彩色相位数据和幅值数据保存为GeoTIFF文件
+    save_phase_tif(phase_color_uint8, output_file_phase)
+    save_phase_tif(amplitude_color_uint8, output_file_amplitude)
+
+
 
 
 if __name__ == "__main__":
