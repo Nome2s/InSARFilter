@@ -2,24 +2,62 @@
 
 ## 文件说明
 
-`original.int`：用于测试的干涉图原图；
+`main.py`：程序的主函数，负责调用其他函数并绘制GUI界面；
 
-`original.int.tif`：原干涉图相位的假彩色图像；
+`goldstein_filter.py`：滤波器函数，实现滤波
 
-`original.int.xml`：指定原干涉图大小、精度等的xml文件；
+`gen_tif.py`：将干涉图输出为`tif`格式的图像；
 
-`filtered_test.int`：经过滤波后的干涉图；
+`requirements.txt`：本项目所需要的库；
 
-`filtered_test.int.tif`.：经过滤波后的干涉图的假彩色图像；
+`data`：放置本工程所需要的相关数据；
 
-`goldstein_filter.py`：对int文件进行滤波的程序，该代码从命令行接收参数，例如：
+`data/original`：放置未经滤波的原图像数据，包含`original.int`、`original.int.tif`、`original.int.xml`和`original_amplitude.tif`
+
+`data/filter_fxx_wyy_szz`：放置滤波后的图像数据，`xx`、`yy`、`zz`分别表示滤波参数、窗口大小、窗口滑动步长，如`filter_f0.5_w32_s8`代表滤波参数为0.5、窗口大小为32、窗口滑动步长为8；
+
+`img`：放置`README`文档的图片。
+
+## 使用指南
+
+1. 创建虚拟环境，使用如下命令：
 
 ```shell
-python goldstein_filter.py original.int [0.5] [32] [8]
+conda create -n filter python=3.8
 ```
 
-`gen_tif.py`：将int文件转化为tif文件，需要在命令行中提供文件名、宽度和高度作为参数。例如：
+2. 打开刚刚创建的虚拟环境：
 
 ```shell
-python gen_tif.py filtered_test.int 2551 2108
+conda activate filter
 ```
+
+3. 安装依赖库：
+
+```shell
+pip install -r requirements.txt
+```
+
+4. 运行程序：
+
+```shell
+python app.py
+```
+
+5. 点击`Browse`选择待处理的文件，此处选择`./data/original/original.int`，注意此时`original.int.xml`也要在此路径下
+
+![pic1](./img/pic1.png)
+
+![pic2](./img/pic2.png)
+
+6. 点击`Apply Filter & Generate TIF`，开始滤波处理
+
+![pic3](./img/pic3.png)
+
+7. 稍等片刻，处理完成，左边为原始的相位图，右侧为滤波后的相位图
+
+![pic4](./img/pic4.png)
+
+同时，`./data/filtered_f0.5_w32_s8`路径下会产生相应的滤波后的数据
+
+![pic5](./img/pic5.png)
