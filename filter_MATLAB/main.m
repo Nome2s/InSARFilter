@@ -16,7 +16,7 @@ function main()
     browseButton = uibutton(fig, 'Text', '浏览', 'Position', [50 250 50 22], 'ButtonPushedFcn', @browseButtonPushed);
 
     % 创建滤波类型选择框
-    filterTypeDropDown = uidropdown(fig, 'Position', [50 190 100 22], 'Items', {'Goldstein', 'Boxcar', 'Zhao'}, 'ValueChangedFcn', @filterTypeChanged);
+    filterTypeDropDown = uidropdown(fig, 'Position', [50 190 100 22], 'Items', {'Goldstein', 'Boxcar', 'Zhao','Yu'}, 'ValueChangedFcn', @filterTypeChanged);
 
     % 创建滤波参数输入框和标签
     alphaEditField = uieditfield(fig, 'numeric', 'Position', [180 190 80 22], 'Value', 0.5);
@@ -49,6 +49,10 @@ function main()
             alphaEditField.Enable = 'off';
             windowSizeEditField.Enable = 'on';
             stepSizeEditField.Enable = 'on';
+        elseif strcmp(filterType, 'Yu')
+            alphaEditField.Enable = 'off';
+            windowSizeEditField.Enable = 'on';
+            stepSizeEditField.Enable = 'on';
         end
     end
 
@@ -69,8 +73,12 @@ function main()
             % 构造输出文件夹路径
             if strcmp(filterType, 'Goldstein')
                 folderName = sprintf('%s_f%.1f_w%d_s%d', filterType, alpha, windowSize, stepSize);
-            else
-             folderName = sprintf('%s_w%d', filterType, windowSize);
+            elseif strcmp(filterType, 'Boxcar')
+                folderName = sprintf('%s_w%d', filterType, windowSize);
+            elseif strcmp(filterType, 'Zhao')
+                folderName = sprintf('%s_w%d_s%d', filterType, windowSize, stepSize);
+            elseif strcmp(filterType, 'Yu')
+                folderName = sprintf('%s_w%d_s%d', filterType, windowSize, stepSize);
             end
 
             outputPath = fullfile('./data', folderName);
@@ -130,7 +138,9 @@ function main()
             elseif strcmp(filterType, 'Boxcar')
                 filteredData = boxcar_filter(data, windowSize);
             elseif strcmp(filterType, 'Zhao')
-                filteredData = zhao_filter(data, windowSize);
+                filteredData = zhao_filter(data, windowSize, stepSize);
+            elseif strcmp(filterType, 'Yu')
+                filteredData = yu_filter(data, windowSize, stepSize);
             end
 
             % 显示滤波后的相位图
