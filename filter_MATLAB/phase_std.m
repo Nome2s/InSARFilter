@@ -16,6 +16,8 @@ pstd=zeros(rows,cols);
 mask=ones(rows,cols);
 idx=isnan(cpx);
 mask(idx)=0;
+
+
 for ii=1:rows
     for jj=1:cols
         if mask(ii,jj)==0
@@ -41,6 +43,6 @@ for ii=1:rows
         window=cpx(mm0:mm1,nn0:nn1);
         idx=~isnan(window);
         phase=angle(window(idx));
-        pstd(ii,jj)=std(phase(:));
+        pstd(ii,jj)=std(phase(:));%这个函数是matlab自带的，容易出错
     end
 end

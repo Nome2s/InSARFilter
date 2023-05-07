@@ -14,6 +14,12 @@ function out_cpx = boxcar_filter(cpx, w)
     % 计算窗口大小对应的行列数
     half_w = floor(w / 2);
 
+    %创建cpx的副本
+    cpx_copy = cpx;
+
+    % 将NaN值替换为0
+    cpx_copy(isnan(cpx_copy)) = 0;
+
     % 遍历输入矩阵中的每个像素
     for r = 1:rows
         for c = 1:cols
@@ -31,7 +37,7 @@ function out_cpx = boxcar_filter(cpx, w)
                     % 检查坐标是否在输入矩阵的范围内
                     if row_idx > 0 && row_idx <= rows && col_idx > 0 && col_idx <= cols
                         % 将当前像素值加入累计和
-                        sum_cpx = sum_cpx + cpx(row_idx, col_idx);
+                        sum_cpx = sum_cpx + cpx_copy(row_idx, col_idx);
                         count = count + 1;
                     end
                 end

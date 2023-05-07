@@ -16,6 +16,13 @@ K = K/sum(K(:));
 K = fftshift(fft2(K));
 
 [rows,cols]=size(cpx);
+
+% 创建cpx的副本
+cpx_copy = cpx;
+
+% 将NaN值替换为0
+cpx_copy(isnan(cpx_copy)) = 0;
+
 out_cpx=zeros(rows,cols);
 for ii=1:step_size:rows
     for jj=1:step_size:cols
@@ -27,7 +34,7 @@ for ii=1:step_size:rows
         if nn>cols
             nn=cols;
         end
-        window=cpx(ii:mm,jj:nn);
+        window=cpx_copy(ii:mm,jj:nn);
         H=fft2(window);
         H=fftshift(H);
         % 使用均值卷积核平滑

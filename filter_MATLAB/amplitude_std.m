@@ -39,6 +39,6 @@ for ii = 1:rows
         window = cpx(mm0:mm1,nn0:nn1);
         idx = ~isnan(window);
         amplitude = abs(window(idx));
-        astd(ii,jj) = std(amplitude(:));
+        astd(ii,jj) = std(amplitude(:));%这个函数是matlab自带的，容易出错
     end
 end

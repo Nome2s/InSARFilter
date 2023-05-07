@@ -14,7 +14,10 @@ cc=zeros(rows,cols);
 mask=ones(rows,cols);
 idx=isnan(cpx);
 mask(idx)=0;
-cpx(idx)=0;
+cpx_copy=cpx;
+cpx_copy(idx)=0;
+
+
 for ii=1:rows
     for jj=1:cols
         if mask(ii,jj)==0
@@ -37,7 +40,7 @@ for ii=1:rows
         if nn1>cols
             nn1=cols;
         end
-        window=cpx(mm0:mm1,nn0:nn1);
+        window=cpx_copy(mm0:mm1,nn0:nn1);
         sum_window=abs(sum(window(:)));
         abs_window=abs(window);
         sum_abs=sum(abs_window(:));
