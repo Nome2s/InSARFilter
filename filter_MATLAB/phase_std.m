@@ -41,6 +41,6 @@ for ii=1:rows
         window=cpx(mm0:mm1,nn0:nn1);
         idx=~isnan(window);
         phase=angle(window(idx));
-        pstd(ii,jj)=std(phase);
+        pstd(ii,jj)=std(phase(:));
     end
 end
