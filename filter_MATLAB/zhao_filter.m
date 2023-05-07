@@ -1,6 +1,6 @@
-function out_cpx=baran_filter(cpx, window_size, step_size)
+function out_cpx=zhao_filter(cpx, window_size, step_size)
 % --------------------------------------------
-% Baran滤波
+% Zhao滤波
 % 输入参数：
 %   cpx             需要滤波的干涉图复数矩阵
 %   window_size     滑动窗口大小
@@ -37,9 +37,9 @@ for ii=1:step_size:rows
 % -----------------------------------------
         window=cpx_copy(ii:mm,jj:nn);
         % 计算相干系数
-        gamma = gen_gamma(window);
+        coh = gen_coh(window);
         % 根据相干系数计算滤波参数alpha
-        alpha = 1 - gamma;
+        alpha = 1 - coh;
 %这段是不同于Goldstein滤波的地方，这里的alpha是根据相干系数计算的，而Goldstein滤波中的alpha是固定的
 % -----------------------------------------
         H=fft2(window);
