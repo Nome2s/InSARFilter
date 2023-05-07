@@ -6,7 +6,6 @@ function out_cpx=goldstein_filter(cpx, alpha, window_size, step_size)
 %   alpha           滤波参数alpha
 %   window_size     滑动窗口大小
 %   step_size       滑动窗口步长
-%
 % 输出：
 %   out_cpx         滤波后的干涉图复数矩阵
 % --------------------------------------------
@@ -47,3 +46,4 @@ idx=angle(cpx)==0;
 out_cpx(idx)=0;
 idx=isnan(angle(cpx));
 out_cpx(idx)=nan;
+end

@@ -4,10 +4,11 @@ function pstd=phase_std(cpx, window_size)
 % 输入：
 %   cpx           干涉图复数矩阵
 %   window_size   估计窗口大小,为奇数，如 5,7,9,...
-%
 % 输出：
 %   pstd          相位标准差
 % -----------------------------------
+
+
 
 R=floor((window_size-1)/2);
 [rows,cols]=size(cpx);
