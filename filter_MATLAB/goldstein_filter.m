@@ -41,6 +41,7 @@ for ii=1:step_size:rows
         out_cpx(ii:mm,jj:nn)=window;
     end
 end
+
 % 掩膜原来是空值的像元
 idx=angle(cpx)==0;
 out_cpx(idx)=0;
