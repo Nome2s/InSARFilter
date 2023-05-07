@@ -16,7 +16,7 @@ function main()
     browseButton = uibutton(fig, 'Text', '浏览', 'Position', [50 250 50 22], 'ButtonPushedFcn', @browseButtonPushed);
 
     % 创建滤波类型选择框
-    filterTypeDropDown = uidropdown(fig, 'Position', [50 190 100 22], 'Items', {'Goldstein', 'Boxcar', 'Lee'}, 'ValueChangedFcn', @filterTypeChanged);
+    filterTypeDropDown = uidropdown(fig, 'Position', [50 190 100 22], 'Items', {'Goldstein', 'Boxcar', 'Zhao'}, 'ValueChangedFcn', @filterTypeChanged);
 
     % 创建滤波参数输入框和标签
     alphaEditField = uieditfield(fig, 'numeric', 'Position', [180 190 80 22], 'Value', 0.5);
@@ -41,10 +41,14 @@ function main()
             alphaEditField.Enable = 'on';
             windowSizeEditField.Enable = 'on';
             stepSizeEditField.Enable = 'on';
-        else
+        elseif strcmp(filterType, 'Boxcar')
             alphaEditField.Enable = 'off';
             windowSizeEditField.Enable = 'on';
             stepSizeEditField.Enable = 'off';
+        elseif strcmp(filterType, 'Zhao')
+            alphaEditField.Enable = 'off';
+            windowSizeEditField.Enable = 'on';
+            stepSizeEditField.Enable = 'on';
         end
     end
 
@@ -125,8 +129,8 @@ function main()
                 filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
             elseif strcmp(filterType, 'Boxcar')
                 filteredData = boxcar_filter(data, windowSize);
-            elseif strcmp(filterType, 'Lee')
-                filteredData = lee_filter(data, windowSize);
+            elseif strcmp(filterType, 'Zhao')
+                filteredData = zhao_filter(data, windowSize);
             end
 
             % 显示滤波后的相位图
