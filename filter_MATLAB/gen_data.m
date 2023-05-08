@@ -1,85 +1,25 @@
-function main()
+function gen_data()
+%批量产生数据，为实验报告提供素材
 
-    clear all;clc;close all;
 
-    % 图像长宽
-    width = 2551;
-    %length = 2108;
+    for alpha=0:0.1:1
 
-    % 创建主界面
-    fig = uifigure('Name', 'InSAR Filter', 'Position', [100 100 400 300]);
 
-    % 创建文件路径标签
-    filePathLabel = uilabel(fig, 'Position', [100 250 250 22], 'Text', '待处理文件路径:');
+            width = 2551;
+            % 获取待处理的文件
+            file = './data/original/original.int';
+        
+            % 读取干涉图复数数据
+            data = read_int(file, width);
+            windowSize=32;
+            stepSize=8;
 
-    % 创建浏览按钮
-    browseButton = uibutton(fig, 'Text', '浏览', 'Position', [50 250 50 22], 'ButtonPushedFcn', @browseButtonPushed);
+            %显示参数
+            display(alpha);
 
-    % 创建滤波类型选择框
-    filterTypeDropDown = uidropdown(fig, 'Position', [50 190 100 22], 'Items', {'Goldstein', 'Boxcar', 'Zhao','Yu'}, 'ValueChangedFcn', @filterTypeChanged);
-
-    % 创建滤波参数输入框和标签
-    alphaEditField = uieditfield(fig, 'numeric', 'Position', [180 190 80 22], 'Value', 0.5);
-    alphaLabel = uilabel(fig, 'Position', [180 215 80 22], 'Text', '滤波参数:');
-
-    % 创建滑动窗口大小输入框和标签
-    windowSizeEditField = uieditfield(fig, 'numeric', 'Position', [310 190 80 22], 'Value', 32);
-    windowSizeLabel = uilabel(fig, 'Position', [310 215 80 22], 'Text', '滑动窗口大小:');
-
-    % 创建滑动窗口步长输入框和标签
-    stepSizeEditField = uieditfield(fig, 'numeric', 'Position', [310 140 80 22], 'Value', 8);
-    stepSizeLabel = uilabel(fig, 'Position', [310 165 80 22], 'Text', '滑动窗口步长:');
-
-    % 创建处理按钮
-    processButton = uibutton(fig, 'Text', '处理', 'Position', [160 50 80 22], 'ButtonPushedFcn', @processButtonPushed);
-
-    % 根据滤波类型设置参数输入框的可用性
-    function filterTypeChanged(~, ~)
-        filterType = filterTypeDropDown.Value;
-
-        if strcmp(filterType, 'Goldstein')
-            alphaEditField.Enable = 'on';
-            windowSizeEditField.Enable = 'on';
-            stepSizeEditField.Enable = 'on';
-        elseif strcmp(filterType, 'Boxcar')
-            alphaEditField.Enable = 'off';
-            windowSizeEditField.Enable = 'on';
-            stepSizeEditField.Enable = 'off';
-        elseif strcmp(filterType, 'Zhao')
-            alphaEditField.Enable = 'off';
-            windowSizeEditField.Enable = 'on';
-            stepSizeEditField.Enable = 'on';
-        elseif strcmp(filterType, 'Yu')
-            alphaEditField.Enable = 'off';
-            windowSizeEditField.Enable = 'on';
-            stepSizeEditField.Enable = 'on';
-        end
-    end
-
-    % 处理按钮的回调函数
-    function processButtonPushed(~, ~)
-        % 获取用户输入的滤波参数、滑动窗口大小和滑动窗口步长
-       
-        alpha = alphaEditField.Value;
-        windowSize = windowSizeEditField.Value;
-        stepSize = stepSizeEditField.Value;
-
-        % 获取待处理的文件
-        file = filePathLabel.Text;
-        if ~strcmp(file, '待处理文件路径:')
-            % 获取选择的滤波类型
-            filterType = filterTypeDropDown.Value;
 
             % 构造输出文件夹路径
-            if strcmp(filterType, 'Goldstein')
-                folderName = sprintf('%s_f%.1f_w%d_s%d', filterType, alpha, windowSize, stepSize);
-            elseif strcmp(filterType, 'Boxcar')
-                folderName = sprintf('%s_w%d', filterType, windowSize);
-            elseif strcmp(filterType, 'Zhao')
-                folderName = sprintf('%s_w%d_s%d', filterType, windowSize, stepSize);
-            elseif strcmp(filterType, 'Yu')
-                folderName = sprintf('%s_w%d_s%d', filterType, windowSize, stepSize);
-            end
+            folderName = sprintf('%s_f%.1f_w%d_s%d', 'Goldstein', alpha, windowSize, stepSize);
 
             outputPath = fullfile('./data', folderName);
 
@@ -88,8 +28,6 @@ function main()
                 mkdir(outputPath);
             end
 
-            % 读取干涉图复数数据
-            data = read_int(file, width);
 
             % 显示滤波前的相位图
             phase = angle(data);
@@ -124,6 +62,10 @@ function main()
             title('Original Phase Standard Deviation');
             saveas(gcf, fullfile(outputPath, 'OriginalPhaseStd'), 'tiffn');
 
+            %打印原图相位平均标准差
+            display('Original Phase Standard Deviation Mean:');
+            display(mean(ps_std(:)));
+
             %显示原图像相位标准差的直方图
             figure, histogram(ps_std, 'BinEdges', 0:0.005:3.5, 'Normalization', 'probability');
             title('Histogram of Original Phase Standard Deviation');
@@ -133,13 +75,17 @@ function main()
             saveas(gcf, fullfile(outputPath, 'OriginalPhaseStdHistogram'), 'tiffn');
 
             %显示原图的幅值标准差
-            amplitude_std = amplitude_std(data, 5);
-            figure, imagesc(amplitude_std); colormap('jet'); colorbar;
+            amplitude_std_original = amplitude_std(data, 5);
+            figure, imagesc(amplitude_std_original); colormap('jet'); colorbar;
             title('Original Amplitude Standard Deviation');
             saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStd'), 'tiffn');
 
+            %打印原图幅值平均标准差
+            display('Original Amplitude Standard Deviation Mean:');
+            display(mean(amplitude_std_original(:)));
+
             %显示原图像幅值标准差的直方图
-            figure, histogram(amplitude_std, 'BinEdges', 0:0.005:3.5, 'Normalization', 'probability');
+            figure, histogram(amplitude_std_original, 'BinEdges', 0:0.005:3.5, 'Normalization', 'probability');
             title('Histogram of Original Amplitude Standard Deviation');
             xlabel('Amplitude Standard Deviation');
             ylabel('Probability');
@@ -147,15 +93,8 @@ function main()
             saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStdHistogram'), 'tiffn');
 
             % 执行滤波
-            if strcmp(filterType, 'Goldstein')
-                filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
-            elseif strcmp(filterType, 'Boxcar')
-                filteredData = boxcar_filter(data, windowSize);
-            elseif strcmp(filterType, 'Zhao')
-                filteredData = zhao_filter(data, windowSize, stepSize);
-            elseif strcmp(filterType, 'Yu')
-                filteredData = yu_filter(data, windowSize, stepSize);
-            end
+            
+            filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
 
             % 显示滤波后的相位图
             phase_out=angle(filteredData);
@@ -189,6 +128,10 @@ function main()
             title('Filtered Phase Standard Deviation');
             saveas(gcf, fullfile(outputPath, 'FilteredPhaseStd'), 'tiffn');
 
+            %打印滤波后图像相位平均标准差
+            display('Filtered Phase Standard Deviation Mean:');
+            display(mean(ps_std_filtered(:)));
+
             %显示滤波后图像相位标准差的直方图
             figure, histogram(ps_std_filtered, 'BinEdges', 0:0.005:3.5, 'Normalization', 'probability');
             title('Histogram of Filtered Phase Standard Deviation');
@@ -203,6 +146,12 @@ function main()
             title('Filtered Amplitude Standard Deviation');
             saveas(gcf, fullfile(outputPath, 'FilteredAmplitudeStd'), 'tiffn');
 
+
+            %打印滤波后图像幅值平均标准差
+            display('Filtered Amplitude Standard Deviation Mean:');
+            display(mean(amplitude_std_filtered(:)));
+
+
             %显示滤波后图像幅值标准差的直方图
             figure, histogram(amplitude_std_filtered, 'BinEdges', 0:0.005:3.5, 'Normalization', 'probability');
             title('Histogram of Filtered Amplitude Standard Deviation');
@@ -212,10 +161,9 @@ function main()
             saveas(gcf, fullfile(outputPath, 'FilteredAmplitudeStdHistogram'), 'tiffn');
 
             
-        
-            % 计算滤波前后幅值的差值并显示
+            % 计算滤波前后相位的差值并显示
             phase_diff=phase_out-phase;
-            figure, imagesc(pahse_diff); colormap('jet'); colorbar;
+            figure, imagesc(phase_diff); colormap('jet'); colorbar;
             title('Phase Difference');
             saveas(gcf, fullfile(outputPath, 'PhaseDiff'),  'tiffn');
 
@@ -234,6 +182,7 @@ function main()
             saveas(gcf, fullfile(outputPath, 'CohDiffHistogram'), 'tiffn');
 
 
+
             % 构造输出文件路径
             [~, ~] = fileparts(file);
             intOutputPath = fullfile(outputPath, 'filtered.int');
@@ -241,23 +190,8 @@ function main()
             % 保存滤波后的int文件
             write_int(intOutputPath, filteredData);
 
-            % 显示处理完成的消息对话框
-            uialert(fig, '处理完成！', '提示', 'Icon', 'success');
-        else
-            uialert(fig, '请选择一个待处理的文件', '提示', 'Icon', 'warning');
-        end
-    end
 
-    % 浏览按钮的回调函数
-    function browseButtonPushed(~, ~)
-        % 打开文件选择对话框
-        [file, path] = uigetfile('*.int', '选择待处理的文件');
-
-        % 如果选择了文件，则更新文件路径显示
-        if file ~= 0
-            filePath = fullfile(path, file);
-            filePathLabel.Text = filePath;
-        end
+            clear all;
+            close all;
     end
 end
-

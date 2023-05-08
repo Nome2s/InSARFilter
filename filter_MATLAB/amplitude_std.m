@@ -8,12 +8,16 @@ function astd = amplitude_std(cpx, window_size)
 %   astd          幅值标准差
 % ----------------------------------
 
+
+
 R = floor((window_size-1)/2);
 [rows,cols] = size(cpx);
 astd = zeros(rows,cols);
 mask = ones(rows,cols);
 idx = isnan(cpx);
 mask(idx) = 0;
+
+
 for ii = 1:rows
     for jj = 1:cols
         if mask(ii,jj) == 0
