@@ -1,45 +1,24 @@
 function gen_data()
 %批量产生数据，为实验报告提供素材
 
-
-    for alpha=0:0.1:1
-
-
             width = 2551;
             % 获取待处理的文件
             file = './data/original/original.int';
         
             % 读取干涉图复数数据
             data = read_int(file, width);
-            windowSize=32;
-            stepSize=8;
-
-            %显示参数
-            display(alpha);
-
-
-            % 构造输出文件夹路径
-            folderName = sprintf('%s_f%.1f_w%d_s%d', 'Goldstein', alpha, windowSize, stepSize);
-
-            outputPath = fullfile('./data', folderName);
-
-            % 如果输出文件夹不存在，则创建
-            if ~exist(outputPath, 'dir')
-                mkdir(outputPath);
-            end
-
 
             % 显示滤波前的相位图
             phase = angle(data);
             figure, imagesc(phase,[-pi,pi]); colormap('jet'); colorbar;
             title('Original Phase');
-            saveas(gcf, fullfile(outputPath, 'OriginalPhase'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalPhase'), 'tiffn');
         
             % 计算并显示原图的幅值图
             amplitude = abs(data);
             figure, imagesc(log10(amplitude)); colormap('gray'); colorbar;
             title('Original Amplitude (log10 scale)');
-            saveas(gcf, fullfile(outputPath, 'OriginalAmplitude'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalAmplitude'), 'tiffn');
         
         
             % 显示原图的幅度图直方图
@@ -48,19 +27,19 @@ function gen_data()
             xlabel('Amplitude');
             ylabel('Probability');
             xlim([-2.5 2.5]);
-            saveas(gcf, fullfile(outputPath, 'OriginalHistogram'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalHistogram'), 'tiffn');
         
             %显示原图像的（伪）相干图
             coh = est_cc(data, 5);
             figure, imagesc(coh); colormap('jet'); colorbar;
             title('Coherence of Original Image');
-            saveas(gcf, fullfile(outputPath, 'OriginalcCoh'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalcCoh'), 'tiffn');
         
             %显示原图的相位标准差
             ps_std = phase_std(data, 5);
             figure, imagesc(ps_std); colormap('jet'); colorbar;
             title('Original Phase Standard Deviation');
-            saveas(gcf, fullfile(outputPath, 'OriginalPhaseStd'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalPhaseStd'), 'tiffn');
 
             %打印原图相位平均标准差
             display('Original Phase Standard Deviation Mean:');
@@ -72,13 +51,13 @@ function gen_data()
             xlabel('Phase Standard Deviation');
             ylabel('Probability');
             xlim([0 3.5]);
-            saveas(gcf, fullfile(outputPath, 'OriginalPhaseStdHistogram'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalPhaseStdHistogram'), 'tiffn');
 
             %显示原图的幅值标准差
             amplitude_std_original = amplitude_std(data, 5);
             figure, imagesc(amplitude_std_original); colormap('jet'); colorbar;
             title('Original Amplitude Standard Deviation');
-            saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStd'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStd'), 'tiffn');
 
             %打印原图幅值平均标准差
             display('Original Amplitude Standard Deviation Mean:');
@@ -90,11 +69,43 @@ function gen_data()
             xlabel('Amplitude Standard Deviation');
             ylabel('Probability');
             xlim([0 3.5]);
-            saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStdHistogram'), 'tiffn');
+            %saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStdHistogram'), 'tiffn');
 
-            % 执行滤波
+    for windowSize=[16:16:400]
+
+            stepSize=windowSize;
+
+            alpha = 0.5;
+
+
+            %显示参数
+            display(windowSize);
+
+            width = 2551;
+            % 获取待处理的文件
+            file = './data/original/original.int';
             
-            filteredData = goldstein_filter(data, alpha, windowSize, stepSize);
+            data = read_int(file, width);
+
+            % 构造输出文件夹路径
+            folderName = sprintf('%s_f%.2f_w%d_s%d', 'Goldstein',alpha,  windowSize, stepSize);
+
+            outputPath = fullfile('./data', folderName);
+
+            % 如果输出文件夹不存在，则创建
+            if ~exist(outputPath, 'dir')
+                mkdir(outputPath);
+            end
+
+
+            % 执行滤波并计算时间
+            t1=clock;
+            filteredData = zhao_filter(data,  windowSize, stepSize);
+            t2=clock;
+            T=etime(t2,t1)
+            % 打印滤波时间
+            display('Filter Time');
+            display(T);
 
             % 显示滤波后的相位图
             phase_out=angle(filteredData);
@@ -174,14 +185,15 @@ function gen_data()
             saveas(gcf, fullfile(outputPath, 'CohDiff'),  'tiffn');
 
             % 计算相干性差直方图并显示
-            figure, histogram(coh_diff, 'BinEdges', -1:0.01:1, 'Normalization', 'probability');
+            figure, histogram(coh_diff, 'BinEdges', -1:0.002:1, 'Normalization', 'probability');
             title('Histogram of Coherence Difference');
             xlabel('Coherence Difference');
             ylabel('Probability');
             xlim([-1 1]);
             saveas(gcf, fullfile(outputPath, 'CohDiffHistogram'), 'tiffn');
 
-
+            % 将上述打印出的数据输出到名为filter_data.xlsx文件中
+            %result_data{end+1} = [alpha, mean(ps_std(:)), mean(amplitude_std_original(:)), T, mean(ps_std_filtered(:)), mean(amplitude_std_filtered(:))];
 
             % 构造输出文件路径
             [~, ~] = fileparts(file);
@@ -191,7 +203,13 @@ function gen_data()
             write_int(intOutputPath, filteredData);
 
 
-            clear all;
+            result_cell = {'Alpha','Window Size','Step size' 'Original Phase Standard Deviation Mean',  'Original Amplitude Standard Deviation Mean', 'Filter Time', 'Filtered Phase Standard Deviation Mean', 'Filtered Amplitude Standard Deviation Mean'; alpha,windowSize,stepSize mean(ps_std(:)), mean(amplitude_std_original(:)), T, mean(ps_std_filtered(:)), mean(amplitude_std_filtered(:))};
+
+            % 将cell数组写入Excel文件
+            writecell(result_cell,  fullfile(outputPath, 'filter_data.xlsx'));
+            
+%             clear all;
             close all;
+
     end
 end

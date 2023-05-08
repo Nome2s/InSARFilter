@@ -72,7 +72,7 @@ function main()
 
             % 构造输出文件夹路径
             if strcmp(filterType, 'Goldstein')
-                folderName = sprintf('%s_f%.1f_w%d_s%d', filterType, alpha, windowSize, stepSize);
+                folderName = sprintf('%s_f%.2f_w%d_s%d', filterType, alpha, windowSize, stepSize);
             elseif strcmp(filterType, 'Boxcar')
                 folderName = sprintf('%s_w%d', filterType, windowSize);
             elseif strcmp(filterType, 'Zhao')
