@@ -71,11 +71,11 @@ function gen_data()
             xlim([0 3.5]);
             %saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStdHistogram'), 'tiffn');
 
-    for windowSize=[16:16:400]
+    for windowSize=15:2:101
 
-            stepSize=windowSize;
+            %windowSize=64;
 
-            alpha = 0.5;
+            %alpha = 0.5;
 
 
             %显示参数
@@ -88,7 +88,7 @@ function gen_data()
             data = read_int(file, width);
 
             % 构造输出文件夹路径
-            folderName = sprintf('%s_f%.2f_w%d_s%d', 'Goldstein',alpha,  windowSize, stepSize);
+            folderName = sprintf('%s_w%d', 'Boxcar' ,windowSize);
 
             outputPath = fullfile('./data', folderName);
 
@@ -100,7 +100,7 @@ function gen_data()
 
             % 执行滤波并计算时间
             t1=clock;
-            filteredData = zhao_filter(data,  windowSize, stepSize);
+            filteredData = boxcar_filter(data,  windowSize);
             t2=clock;
             T=etime(t2,t1)
             % 打印滤波时间
@@ -203,12 +203,12 @@ function gen_data()
             write_int(intOutputPath, filteredData);
 
 
-            result_cell = {'Alpha','Window Size','Step size' 'Original Phase Standard Deviation Mean',  'Original Amplitude Standard Deviation Mean', 'Filter Time', 'Filtered Phase Standard Deviation Mean', 'Filtered Amplitude Standard Deviation Mean'; alpha,windowSize,stepSize mean(ps_std(:)), mean(amplitude_std_original(:)), T, mean(ps_std_filtered(:)), mean(amplitude_std_filtered(:))};
+            result_cell = {'Window Size', 'Original Phase Standard Deviation Mean',  'Original Amplitude Standard Deviation Mean', 'Filter Time', 'Filtered Phase Standard Deviation Mean', 'Filtered Amplitude Standard Deviation Mean';windowSize ,mean(ps_std(:)), mean(amplitude_std_original(:)), T, mean(ps_std_filtered(:)), mean(amplitude_std_filtered(:))};
 
             % 将cell数组写入Excel文件
             writecell(result_cell,  fullfile(outputPath, 'filter_data.xlsx'));
             
-%             clear all;
+            %clear all;
             close all;
 
     end
