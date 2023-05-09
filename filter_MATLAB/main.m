@@ -1,6 +1,8 @@
 function main()
 
-    clear all;clc;close all;
+    close all;
+    clear all;
+    clc;
 
     % 图像长宽
     width = 2551;
@@ -110,13 +112,13 @@ function main()
             xlabel('Amplitude');
             ylabel('Probability');
             xlim([-2.5 2.5]);
-            saveas(gcf, fullfile(outputPath, 'OriginalHistogram'), 'tiffn');
+            saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeHistogram'), 'tiffn');
         
             %显示原图像的（伪）相干图
             coh = est_cc(data, 5);
             figure, imagesc(coh); colormap('jet'); colorbar;
             title('Coherence of Original Image');
-            saveas(gcf, fullfile(outputPath, 'OriginalcCoh'), 'tiffn');
+            saveas(gcf, fullfile(outputPath, 'OriginalCoh'), 'tiffn');
         
             %显示原图的相位标准差
             ps_std = phase_std(data, 5);
@@ -133,13 +135,13 @@ function main()
             saveas(gcf, fullfile(outputPath, 'OriginalPhaseStdHistogram'), 'tiffn');
 
             %显示原图的幅值标准差
-            amplitude_std = amplitude_std(data, 5);
-            figure, imagesc(amplitude_std); colormap('jet'); colorbar;
+            amplitude_std_original = amplitude_std(data, 5);
+            figure, imagesc(amplitude_std_original); colormap('jet'); colorbar;
             title('Original Amplitude Standard Deviation');
             saveas(gcf, fullfile(outputPath, 'OriginalAmplitudeStd'), 'tiffn');
 
             %显示原图像幅值标准差的直方图
-            figure, histogram(amplitude_std, 'BinEdges', 0:0.005:3.5, 'Normalization', 'probability');
+            figure, histogram(amplitude_std_original, 'BinEdges', 0:0.005:3.5, 'Normalization', 'probability');
             title('Histogram of Original Amplitude Standard Deviation');
             xlabel('Amplitude Standard Deviation');
             ylabel('Probability');
@@ -175,7 +177,7 @@ function main()
             xlabel('Amplitude');
             ylabel('Probability');
             xlim([-2.5 2.5]);
-            saveas(gcf, fullfile(outputPath, 'FilteredHistogram'), 'tiffn');
+            saveas(gcf, fullfile(outputPath, 'FilteredAmplitudeHistogram'), 'tiffn');
         
             %显示滤波后图像的（伪）相干性
             coh_filetered = est_cc(filteredData, 5);
@@ -215,7 +217,7 @@ function main()
         
             % 计算滤波前后幅值的差值并显示
             phase_diff=phase_out-phase;
-            figure, imagesc(pahse_diff); colormap('jet'); colorbar;
+            figure, imagesc(phase_diff); colormap('jet'); colorbar;
             title('Phase Difference');
             saveas(gcf, fullfile(outputPath, 'PhaseDiff'),  'tiffn');
 
