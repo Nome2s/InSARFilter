@@ -1,5 +1,5 @@
 # GoldsteinFilter
-InSAR中经典的Goldstein滤波算法的实现
+InSAR 中经典的 Goldstein 滤波算法的实现
 
 ## Requirements
 
@@ -58,7 +58,7 @@ Results should include:
 
 下载地址：https://disk.pku.edu.cn:443/link/5CB824412F45BBA73FA67BE18DE2F993
 
-使用Python或其他编程语言来实现以下论文中的干涉图滤波算法。
+使用 Python 或其他编程语言来实现以下论文中的干涉图滤波算法。
 
 Goldstein and Werner, 1998, Radar interferogram filtering for geophysical applications, GEOPHYSICAL RESEARCH LETTERS.
 
@@ -74,7 +74,7 @@ Goldstein and Werner, 1998, Radar interferogram filtering for geophysical applic
 (3) 滤波窗的移动步长： 8
 你可以尝试不同的参数，看看产生的滤波效果。
 
-还提供了做测试的干涉图。它是一个简单的2维矩阵。图像中只有一个波段。每个像素是一个复数，有一个实部和一个虚部，都是四字节的浮点数格式。干涉图被存储为
+还提供了做测试的干涉图。它是一个简单的 2 维矩阵。图像中只有一个波段。每个像素是一个复数，有一个实部和一个虚部，都是四字节的浮点数格式。干涉图被存储为
 
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 
@@ -84,7 +84,7 @@ real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 
 real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 
-你可以将干涉图导入任何图像应用程序，如Python、Matlab和ENVI。你可以查看它的相位和幅值。幅值通常有很大的动态范围，所以你可以在显示它时取其对数。
+你可以将干涉图导入任何图像应用程序，如 Python、Matlab 和ENVI。你可以查看它的相位和幅值。幅值通常有很大的动态范围，所以你可以在显示它时取其对数。
 
 下面是文件的列表。
 
@@ -100,6 +100,6 @@ real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 
 - 你的代码
 
-- 用你的代码进行的实验结果，例如过滤前后的图像（如diff_150405-150503_10rlks_56alks.int.tif），你用于过滤的参数。
+- 用你的代码进行的实验结果，例如过滤前后的图像（如 diff_150405-150503_10rlks_56alks.int.tif），你用于过滤的参数。
 
 - 一份关于你的工作的简单报告，在报告中谈谈你对这个方法的见解，例如，为什么它能起到滤波的作用，可能的改进方法等
