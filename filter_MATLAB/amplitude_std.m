@@ -9,7 +9,6 @@ function astd = amplitude_std(cpx, window_size)
 % ----------------------------------
 
 
-
 R = floor((window_size-1)/2);
 [rows,cols] = size(cpx);
 astd = zeros(rows,cols);
@@ -43,6 +42,6 @@ for ii = 1:rows
         window = cpx(mm0:mm1,nn0:nn1);
         idx = ~isnan(window);
         amplitude = abs(window(idx));
-        astd(ii,jj) = std(amplitude(:));%这个函数是matlab自带的，容易出错
+        astd(ii,jj) = std(amplitude(:)); %这个函数是matlab的内置函数，容易出错
     end
 end

@@ -8,6 +8,8 @@ function cc=est_cc(cpx, window_size)
 % cc            伪相干矩阵
 % ----------------------------------
 
+
+
 R=floor((window_size-1)/2);
 [rows,cols]=size(cpx);
 cc=zeros(rows,cols);

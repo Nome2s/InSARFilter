@@ -94,7 +94,7 @@ real_part imaginary_part real_part imaginary_part ... real_part imaginary_part
 
 - diff_150405-150503_10rlks_56alks.int.xml ---指定干涉图大小、精度等的xml文件。
 
-- diff_150405-150503_10rlks_56alks.int.tif ---干涉图的相位的假彩色图像。当你显示干涉图时，你应该能在任何图像应用程序中看到同样的东西，尽管你可以使用不同的颜色映射，如rainbow, jet等。
+- diff_150405-150503_10rlks_56alks.int.tif ---干涉图的相位的假彩色图像。当你显示干涉图时，你应该能在任何图像应用程序中看到同样的东西，尽管你可以使用不同的颜色映射，如 rainbow, jet 等。
 
 你的结果应包括：
 
