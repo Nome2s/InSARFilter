@@ -6,6 +6,7 @@ function out_cpx=goldstein_filter(cpx, alpha, window_size, step_size)
 %   alpha           滤波参数alpha
 %   window_size     滑动窗口大小
 %   step_size       滑动窗口步长
+%
 % 输出：
 %   out_cpx         滤波后的干涉图复数矩阵
 % --------------------------------------------
@@ -15,15 +16,19 @@ K = ones(3, 3);
 K = K/sum(K(:));
 K = fftshift(fft2(K));
 
+% 构造权阵
+if mod(window_size,2)~=0
+    window_size=window_size-1;
+end
+x=[1:window_size/2];
+[X,Y]=meshgrid(x,x);
+X=X+Y;
+weight=[X,fliplr(X)];
+weight=[weight;flipud(weight)];
+
 [rows,cols]=size(cpx);
-
-% 创建cpx的副本
-cpx_copy = cpx;
-
-% 将NaN值替换为0
-cpx_copy(isnan(cpx_copy)) = 0;
-
 out_cpx=zeros(rows,cols);
+
 for ii=1:step_size:rows
     for jj=1:step_size:cols
         mm=ii+window_size-1;
@@ -34,7 +39,8 @@ for ii=1:step_size:rows
         if nn>cols
             nn=cols;
         end
-        window=cpx_copy(ii:mm,jj:nn);
+        window=cpx(ii:mm,jj:nn);
+        ww=weight(1:(mm-ii+1),1:(nn-jj+1));
         H=fft2(window);
         H=fftshift(H);
         % 使用均值卷积核平滑
@@ -45,13 +51,11 @@ for ii=1:step_size:rows
         H = H .* S;
         H=ifftshift(H);
         window=ifft2(H);
-        out_cpx(ii:mm,jj:nn)=window;
+        out_cpx(ii:mm,jj:nn)=out_cpx(ii:mm,jj:nn)+window.*ww;
     end
 end
-
 % 掩膜原来是空值的像元
 idx=angle(cpx)==0;
 out_cpx(idx)=0;
 idx=isnan(angle(cpx));
 out_cpx(idx)=nan;
-end
