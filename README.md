@@ -3,9 +3,6 @@ InSAR 中经典的 Goldstein 滤波算法的实现
 
 ## Requirements
 
-download at:https://disk.pku.edu.cn:443/link/5CB824412F45BBA73FA67BE18DE2F993 
-
-
 Using Python or other programming languages to implement the interferogram filtering algorithm in the following paper
 
 Goldstein and Werner, 1998, Radar interferogram filtering for geophysical applications, GEOPHYSICAL RESEARCH LETTERS.
@@ -55,8 +52,6 @@ Results should include:
 * a simple report about your work in which you discuss your insights into the method, e.g., why it works as a filter, possible improvements, etc.
 
 ## 要求
-
-下载地址：https://disk.pku.edu.cn:443/link/5CB824412F45BBA73FA67BE18DE2F993
 
 使用 Python 或其他编程语言来实现以下论文中的干涉图滤波算法。
 
