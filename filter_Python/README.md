@@ -44,7 +44,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-5. 点击`Browse`选择待处理的文件，此处选择`./data/original/original.int`，注意此时`original.int.xml`也要在此路径下
+5. 点击`Browse`选择待处理的文件，此处选择`./data/original/original.int`，注意此时与int对应的`original.int.xml`也要在此路径下
 
 ![pic1](./img/pic1.png)
 
