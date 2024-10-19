@@ -38,13 +38,6 @@
 
 `img`：放置`README`文档的图片。
 
-## 代码&数据
-
-查看完整的 MATLAB 和 Python 代码请访问[github.com/guanshuao/InSARFilter](github.com/guanshuao/InSARFilter)
-
-本报告使用 LaTeX 编写，查看 LaTeX 源代码请访问[overleaf.com/read/gjfqbtycgysb](overleaf.com/read/gjfqbtycgysb)
-
-实验数据请访问[百度网盘](https://pan.baidu.com/s/1OVq1j1YSSBMKiSn8v9iL_w?pwd=1234)
 
 ## 使用指南
 
